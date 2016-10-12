@@ -33,7 +33,7 @@ int nefryrestapi::stateString(String s)
 }
 
 void nefryrestapi::begin() {
-
+	//digitalRead
 	Nefry.getWebServer()->on("/api/beta/digitalRead", [&]() {
 		String ps = Nefry.getWebServer()->arg("pin");
 		pinMode(pinString(ps), INPUT);
@@ -44,7 +44,7 @@ void nefryrestapi::begin() {
 		content += F("}");
 		Nefry.getWebServer()->send(200, "application/json", content);
 	});
-
+	//digitalWeite
 	Nefry.getWebServer()->on("/api/beta/digitalWrite", [&]() {
 		String ps = Nefry.getWebServer()->arg("pin");
 		String st = Nefry.getWebServer()->arg("state");
@@ -57,10 +57,22 @@ void nefryrestapi::begin() {
 		content += F("}");
 		Nefry.getWebServer()->send(200, "application/json", content);
 	});
-
+	//analogRead
 	Nefry.getWebServer()->on("/api/beta/analogRead", [&]() {
 		String content = F("{\"mode\":\"analogRead\",\"value\":");
 		content += analogRead(A0);
+		content += F("}");
+		Nefry.getWebServer()->send(200, "application/json", content);
+	});
+	//analogWrite
+	Nefry.getWebServer()->on("/api/beta/digitalWrite", [&]() {
+		String ps = Nefry.getWebServer()->arg("pin");
+		String st = Nefry.getWebServer()->arg("state");
+		String content = F("{\"mode\":\"digitalWrite\",\"pin\":\"");
+		content += ps;
+		content += F("\",\"value\":");
+		content += st.toInt();
+		analogWrite(pinString(ps), st.toInt());
 		content += F("}");
 		Nefry.getWebServer()->send(200, "application/json", content);
 	});
