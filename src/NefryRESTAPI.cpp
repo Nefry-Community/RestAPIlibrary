@@ -38,34 +38,49 @@ void nefryrestapi::gpioInput()
 
 	//digitalRead
 	Nefry.getWebServer()->on("/api/beta/digitalRead", [&]() {
-		String ps = Nefry.getWebServer()->arg("pin");
-		pinMode(pinString(ps), INPUT);
-		String content = F("{\"mode\":\"digitalRead\",\"pin\":\"");
-		content += ps;
-		content += F("\",\"value\":");
-		content += digitalRead(pinString(ps));
-		content += F("}");
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ps = Nefry.getWebServer()->arg("pin");
+			pinMode(pinString(ps), INPUT);
+			String content = F("{\"mode\":\"digitalRead\",\"pin\":\"");
+			content += ps;
+			content += F("\",\"value\":");
+			content += digitalRead(pinString(ps));
+			content += F("}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//digitalReadpullup
 	Nefry.getWebServer()->on("/api/beta/digitalReadpullup", [&]() {
-		String ps = Nefry.getWebServer()->arg("pin");
-		pinMode(pinString(ps), INPUT_PULLUP);
-		String content = F("{\"mode\":\"digitalRead\",\"pin\":\"");
-		content += ps;
-		content += F("\",\"value\":");
-		content += digitalRead(pinString(ps));
-		content += F("}");
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ps = Nefry.getWebServer()->arg("pin");
+			pinMode(pinString(ps), INPUT_PULLUP);
+			String content = F("{\"mode\":\"digitalRead\",\"pin\":\"");
+			content += ps;
+			content += F("\",\"value\":");
+			content += digitalRead(pinString(ps));
+			content += F("}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//analogRead
 	Nefry.getWebServer()->on("/api/beta/analogRead", [&]() {
-		String content = F("{\"mode\":\"analogRead\",\"value\":");
-		content += analogRead(A0);
-		content += F("}");
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String content = F("{\"mode\":\"analogRead\",\"value\":");
+			content += analogRead(A0);
+			content += F("}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 }
 
@@ -75,32 +90,42 @@ void nefryrestapi::gpioOutput()
 
 	//digitalWeite
 	Nefry.getWebServer()->on("/api/beta/digitalWrite", [&]() {
-		String ps = Nefry.getWebServer()->arg("pin");
-		String st = Nefry.getWebServer()->arg("state");
-		pinMode(pinString(ps), OUTPUT);
-		String content = F("{\"mode\":\"digitalWrite\",\"pin\":\"");
-		content += ps;
-		content += F("\",\"value\":");
-		content += stateString(st);
-		digitalWrite(pinString(ps), stateString(st));
-		content += F("}");
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ps = Nefry.getWebServer()->arg("pin");
+			String st = Nefry.getWebServer()->arg("state");
+			pinMode(pinString(ps), OUTPUT);
+			String content = F("{\"mode\":\"digitalWrite\",\"pin\":\"");
+			content += ps;
+			content += F("\",\"value\":");
+			content += stateString(st);
+			digitalWrite(pinString(ps), stateString(st));
+			content += F("}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//analogWrite
 	Nefry.getWebServer()->on("/api/beta/analogWrite", [&]() {
-		String ps = Nefry.getWebServer()->arg("pin");
-		String st = Nefry.getWebServer()->arg("state");
-		int sti = st.toInt();
-		if (sti < 0)sti = 0;
-		if (sti > 255)sti = 255;
-		String content = F("{\"mode\":\"analogWrite\",\"pin\":\"");
-		content += ps;
-		content += F("\",\"value\":");
-		content += st.toInt();
-		analogWrite(pinString(ps), st.toInt());
-		content += F("}");
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ps = Nefry.getWebServer()->arg("pin");
+			String st = Nefry.getWebServer()->arg("state");
+			int sti = st.toInt();
+			if (sti < 0)sti = 0;
+			if (sti > 255)sti = 255;
+			String content = F("{\"mode\":\"analogWrite\",\"pin\":\"");
+			content += ps;
+			content += F("\",\"value\":");
+			content += st.toInt();
+			analogWrite(pinString(ps), st.toInt());
+			content += F("}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 }
 
@@ -108,54 +133,74 @@ void nefryrestapi::serialCotrol()
 {
 	//Serialbegin
 	Nefry.getWebServer()->on("/api/beta/Serialbegin", [&]() {
-		String ba = Nefry.getWebServer()->arg("band");
-		String content = F("{\"mode\":\"Serialbegin\",\"band\":");
-		content += ba.toInt();
-		content += F("}");
-		Serial.begin(ba.toInt());
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ba = Nefry.getWebServer()->arg("band");
+			String content = F("{\"mode\":\"Serialbegin\",\"band\":");
+			content += ba.toInt();
+			content += F("}");
+			Serial.begin(ba.toInt());
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//Serialprint
 	Nefry.getWebServer()->on("/api/beta/Serialprint", [&]() {
-		String ba = Nefry.getWebServer()->arg("message");
-		String content = F("{\"mode\":\"Serialprint\",\"message\":\"");
-		content += ba;
-		content += F("\"}");
-		Serial.print(ba);
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ba = Nefry.getWebServer()->arg("message");
+			String content = F("{\"mode\":\"Serialprint\",\"message\":\"");
+			content += ba;
+			content += F("\"}");
+			Serial.print(ba);
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//Serialprintln
-	Nefry.getWebServer()->on("/api/beta/Serialprintln", [&]() {
-		String ba = Nefry.getWebServer()->arg("message");
-		String content = F("{\"mode\":\"Serialprintln\",\"message\":\"");
-		content += ba;
-		content += F("\"}");
-		Serial.println(ba);
-		Nefry.getWebServer()->send(200, "application/json", content);
+	Nefry.getWebServer()->on("/api/beta/Serialprintln", [&](){ 
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ba = Nefry.getWebServer()->arg("message");
+			String content = F("{\"mode\":\"Serialprintln\",\"message\":\"");
+			content += ba;
+			content += F("\"}");
+			Serial.println(ba);
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 
 
 	//Serialread
 	Nefry.getWebServer()->on("/api/beta/Serialread", [&]() {
-		char read_char[128], i = 0, w = 0;
-		while (Serial.available() <= 0 || w++ != 10) {
-			while (Serial.available() > 0) {
-				read_char[i++] = Serial.read();
-				if (i > 127 || read_char[i] == '\n' || read_char[i] == '\r') {
-					read_char[i - 1] = '\0';
-					break;
-				}
-			}
-			if (i != 0)break;
-			delay(100);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
-		String content = F("{\"mode\":\"Serialread\",\"message\":\"");
-		content += read_char;
-		content += F("\"}");
-		Nefry.getWebServer()->send(200, "application/json", content);
+		else {
+			char read_char[128], i = 0, w = 0;
+			while (Serial.available() <= 0 || w++ != 10) {
+				while (Serial.available() > 0) {
+					read_char[i++] = Serial.read();
+					if (i > 127 || read_char[i] == '\n' || read_char[i] == '\r') {
+						read_char[i - 1] = '\0';
+						break;
+					}
+				}
+				if (i != 0)break;
+				delay(100);
+			}
+			String content = F("{\"mode\":\"Serialread\",\"message\":\"");
+			content += read_char;
+			content += F("\"}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 }
 
@@ -163,42 +208,53 @@ void nefryrestapi::nefryControl()
 {
 	//Nefryprint
 	Nefry.getWebServer()->on("/api/beta/Nefryprint", [&]() {
-		String ba = Nefry.getWebServer()->arg("message");
-		String content = F("{\"mode\":\"Nefryprint\",\"message\":\"");
-		content += ba;
-		content += F("\"}");
-		Nefry.print(ba);
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ba = Nefry.getWebServer()->arg("message");
+			String content = F("{\"mode\":\"Nefryprint\",\"message\":\"");
+			content += ba;
+			content += F("\"}");
+			Nefry.print(ba);
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//Nefryprintln
 	Nefry.getWebServer()->on("/api/beta/Nefryprintln", [&]() {
-		String ba = Nefry.getWebServer()->arg("message");
-		String content = F("{\"mode\":\"Nefryprintln\",\"message\":\"");
-		content += ba;
-		content += F("\"}");
-		Nefry.println(ba);
-		Nefry.getWebServer()->send(200, "application/json", content);
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ba = Nefry.getWebServer()->arg("message");
+			String content = F("{\"mode\":\"Nefryprintln\",\"message\":\"");
+			content += ba;
+			content += F("\"}");
+			Nefry.println(ba);
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//Nefryread
 	Nefry.getWebServer()->on("/api/beta/Nefryread", [&]() {
-				if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
-			Nefry.getWebServer()->send(200, "text/html", "password err");
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
 		else {
-		String content = F("{\"mode\":\"Nefryread\",\"message\":\"");
-		content += Nefry.read();
-		content += F("\"}");
-		Nefry.getWebServer()->send(200, "application/json", content);
+			String content = F("{\"mode\":\"Nefryread\",\"message\":\"");
+			content += Nefry.read();
+			content += F("\"}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
 	});
 
 	//NefrysetLed
 	Nefry.getWebServer()->on("/api/beta/NefrysetLed", [&]() {
-		/*if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
-			Nefry.getWebServer()->send(200, "text/html", "password err");
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
-		else {*/
+		else {
 			String rs = Nefry.getWebServer()->arg("r");
 			String gs = Nefry.getWebServer()->arg("g");
 			String bs = Nefry.getWebServer()->arg("b");
@@ -211,7 +267,7 @@ void nefryrestapi::nefryControl()
 			content += F("}");
 			Nefry.setLed(rs.toInt(), gs.toInt(), bs.toInt());
 			Nefry.getWebServer()->send(200, "application/json", content);
-		//}
+		}
 	});
 
 }
