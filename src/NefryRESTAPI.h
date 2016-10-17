@@ -18,10 +18,17 @@ class nefryrestapi {
 private:
 	int pinString(String s);
 	int stateString(String s);
+	void gpioInput(); 
+	void gpioOutput();
+	void serialCotrol();
+	void nefryControl();
+	String key;
+	bool passcheck(String keyset);
 
 public:
 
-	void begin();
+	void begin(bool nefry=1,bool input=1,bool output=1,bool serial=1);
+	void setPassword(String password);
 
 };
 extern nefryrestapi NefryRESTAPI;
