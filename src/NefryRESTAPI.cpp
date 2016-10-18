@@ -117,7 +117,7 @@ void nefryrestapi::gpioOutput()
 			String st = Nefry.getWebServer()->arg("state");
 			int sti = st.toInt();
 			if (sti < 0)sti = 0;
-			if (sti > 255)sti = 255;
+			if (sti > 1023)sti = 1023;
 			String content = F("{\"mode\":\"analogWrite\",\"pin\":\"");
 			content += ps;
 			content += F("\",\"value\":");
