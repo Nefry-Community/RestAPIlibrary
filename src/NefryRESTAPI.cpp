@@ -272,6 +272,17 @@ void nefryrestapi::nefryControl()
 	});
 
 }
+void nefryrestapi::apiControl() {
+	//NefryapiVersion
+	Nefry.getWebServer()->on("/api/version", [&]() {
+		String content = F("{\"mode\":\"version\",\"version\":");
+		content += VERSION;
+		content += F("}");
+		Nefry.setLed(rs.toInt(), gs.toInt(), bs.toInt());
+		Nefry.getWebServer()->send(200, "application/json", content);
+
+	});
+}
 
 bool nefryrestapi::passcheck(String keyset)
 {
@@ -281,6 +292,7 @@ bool nefryrestapi::passcheck(String keyset)
 }
 
 void nefryrestapi::begin(bool nefry,bool input, bool output, bool serial) {
+	apiControl();
 	if (nefry)nefryControl();
 	if (input)gpioInput();
 	if (input)gpioOutput();

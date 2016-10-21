@@ -22,6 +22,7 @@ private:
 	void gpioOutput();
 	void serialCotrol();
 	void nefryControl();
+	void apiControl();
 	String key;
 	bool passcheck(String keyset);
 
