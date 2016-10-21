@@ -9,6 +9,7 @@ http://opensource.org/licenses/mit-license.php
 
 #include "NefryRESTAPI.h"
 
+#define VERSION "beta"
 
 int nefryrestapi::pinString(String s)
 {
@@ -37,7 +38,7 @@ void nefryrestapi::gpioInput()
 	//GPIO‚Ì“ü—Í‚ð‚Ü‚Æ‚ß‚½ŠÖ”
 
 	//digitalRead
-	Nefry.getWebServer()->on("/api/beta/digitalRead", [&]() {
+	Nefry.getWebServer()->on(("/api/"+VERSION+"/digitalRead").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -54,7 +55,7 @@ void nefryrestapi::gpioInput()
 	});
 
 	//digitalReadpullup
-	Nefry.getWebServer()->on("/api/beta/digitalReadpullup", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/digitalReadpullup").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -71,7 +72,7 @@ void nefryrestapi::gpioInput()
 	});
 
 	//analogRead
-	Nefry.getWebServer()->on("/api/beta/analogRead", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/analogRead").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -89,7 +90,7 @@ void nefryrestapi::gpioOutput()
 	//GPIO‚Ìo—Í‚ð‚Ü‚Æ‚ß‚½ŠÖ”
 
 	//digitalWeite
-	Nefry.getWebServer()->on("/api/beta/digitalWrite", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/digitalWrite").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -108,7 +109,7 @@ void nefryrestapi::gpioOutput()
 	});
 
 	//analogWrite
-	Nefry.getWebServer()->on("/api/beta/analogWrite", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/analogWrite").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -132,7 +133,7 @@ void nefryrestapi::gpioOutput()
 void nefryrestapi::serialCotrol()
 {
 	//Serialbegin
-	Nefry.getWebServer()->on("/api/beta/Serialbegin", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Serialbegin").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -147,7 +148,7 @@ void nefryrestapi::serialCotrol()
 	});
 
 	//Serialprint
-	Nefry.getWebServer()->on("/api/beta/Serialprint", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Serialprint").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -162,7 +163,7 @@ void nefryrestapi::serialCotrol()
 	});
 
 	//Serialprintln
-	Nefry.getWebServer()->on("/api/beta/Serialprintln", [&](){ 
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Serialprintln").c_str(), [&](){
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -179,7 +180,7 @@ void nefryrestapi::serialCotrol()
 
 
 	//Serialread
-	Nefry.getWebServer()->on("/api/beta/Serialread", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Serialread").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -207,7 +208,7 @@ void nefryrestapi::serialCotrol()
 void nefryrestapi::nefryControl()
 {
 	//Nefryprint
-	Nefry.getWebServer()->on("/api/beta/Nefryprint", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Nefryprint").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -222,7 +223,7 @@ void nefryrestapi::nefryControl()
 	});
 
 	//Nefryprintln
-	Nefry.getWebServer()->on("/api/beta/Nefryprintln", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Nefryprintln").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -237,7 +238,7 @@ void nefryrestapi::nefryControl()
 	});
 
 	//Nefryread
-	Nefry.getWebServer()->on("/api/beta/Nefryread", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Nefryread").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
@@ -250,7 +251,7 @@ void nefryrestapi::nefryControl()
 	});
 
 	//NefrysetLed
-	Nefry.getWebServer()->on("/api/beta/NefrysetLed", [&]() {
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/NefrysetLed").c_str(), [&]() {
 		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
 			Nefry.getWebServer()->send(403, "text/html", "password err");
 		}
