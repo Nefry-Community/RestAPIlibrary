@@ -12,6 +12,7 @@ http://opensource.org/licenses/mit-license.php
 #define __NEFRYAPI_H__
 
 #include <Nefry.h>
+#include <Wire.h>
 
 class nefryrestapi {
 
@@ -25,10 +26,10 @@ private:
 	void apiControl();
 	String key;
 	bool passcheck(String keyset);
-
+	void i2cControl();
 public:
 
-	void begin(bool nefry=1,bool input=1,bool output=1,bool serial=1);
+	void begin(bool nefry=1,bool input=1,bool output=1,bool serial=1,bool i2c=1);
 	void setPassword(String password);
 
 };

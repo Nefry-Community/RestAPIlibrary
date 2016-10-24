@@ -284,6 +284,123 @@ void nefryrestapi::apiControl() {
 	});
 }
 
+void nefryrestapi::i2cControl()
+{
+	//(i2c)Wirebegin
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Wirebegin").c_str(), [&]() {
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String content = F("{\"mode\":\"Wirebegin\"}");
+			Wire.begin();
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
+	});
+
+	//Wire.beginTransmission(ADDR);
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/WirebeginTransmission").c_str(), [&]() {
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ad = Nefry.getWebServer()->arg("address");
+			String content = F("{\"mode\":\"WirebeginTransmission\",\"address\":");
+			content += ad.toiInt();
+			content += F("}");
+			Wire.beginTransmission(ad.toiInt());
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
+	});
+
+
+	//Wire.endTransmission();
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/WireendTransmission").c_str(), [&]() {
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			Wire.endTransmission();
+			String content = F("{\"mode\":\"WireendTransmission\",\"result\":\"");
+			switch (Wire.endTransmission())
+			{
+			case 0:
+				content += F("success");
+				break;
+			case 1:
+				content += F("data too long to fit in transmit buffer");
+				break;
+			case 2:
+				content += F("received NACK on transmit of address");
+				break;
+			case 3:
+				content += F("received NACK on transmit of data");
+				break;
+			case 4:
+				content += F("other error");
+				break;
+			default:
+				break;
+			}
+			content += F("\"}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
+	});
+
+
+	//Wire.requestFrom
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/WirerequestFrom").c_str(), [&]() {
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String ad = Nefry.getWebServer()->arg("address");
+			String cn = Nefry.getWebServer()->arg("count");
+			String content = F("{\"mode\":\"WirerequestFrom\",\"address\":");
+			content += ad.toInt();
+			content += F(",\"count\":");
+			content += cn.toInt();
+			content += F("}");
+			Wire.requestFrom(ad.toInt(), cn.toInt());
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
+	});
+
+
+	//Wire.write
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Wirewrite").c_str(), [&]() {
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String rs = Nefry.getWebServer()->arg("data");
+			String content = F("{\"mode\":\"Wirewrite\",\"data\":");
+			content += rs.toInt();
+			content += F("}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+			Wire.write(rs.toInt());
+		}
+	});
+
+
+	//Wire.read
+	Nefry.getWebServer()->on(("/api/" + VERSION + "/Wireread").c_str(), [&]() {
+		if (!passcheck(Nefry.getWebServer()->arg("pass"))) {
+			Nefry.getWebServer()->send(403, "text/html", "password err");
+		}
+		else {
+			String c="";
+			while (Wire.available()) {   // 要求より短いデータが来る可能性あり
+				c += Wire.read();      // 1バイトを受信
+			}
+			String content = F("{\"mode\":\"Wireread\",\"data\":\"");
+			content += c;
+			content += F("\"}");
+			Nefry.getWebServer()->send(200, "application/json", content);
+		}
+	});
+}
+
 bool nefryrestapi::passcheck(String keyset)
 {
 	if (key.length() == 0)return true;
@@ -291,13 +408,13 @@ bool nefryrestapi::passcheck(String keyset)
 	return false;
 }
 
-void nefryrestapi::begin(bool nefry,bool input, bool output, bool serial) {
+void nefryrestapi::begin(bool nefry, bool input, bool output, bool serial, bool i2c) {
 	apiControl();
 	if (nefry)nefryControl();
 	if (input)gpioInput();
 	if (input)gpioOutput();
 	if (serial)serialCotrol();
-
+	if (i2c)i2cControl();
 }
 void nefryrestapi::setPassword(String password)
 {
