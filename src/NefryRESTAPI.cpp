@@ -278,7 +278,6 @@ void nefryrestapi::apiControl() {
 		String content = F("{\"mode\":\"version\",\"version\":");
 		content += VERSION;
 		content += F("}");
-		Nefry.setLed(rs.toInt(), gs.toInt(), bs.toInt());
 		Nefry.getWebServer()->send(200, "application/json", content);
 
 	});
