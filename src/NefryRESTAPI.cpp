@@ -275,9 +275,9 @@ void nefryrestapi::nefryControl()
 void nefryrestapi::apiControl() {
 	//NefryapiVersion
 	Nefry.getWebServer()->on("/api/version", [&]() {
-		String content = F("{\"mode\":\"version\",\"version\":");
+		String content = F("{\"mode\":\"version\",\"version\":\"");
 		content += VERSION;
-		content += F("}");
+		content += F("\"}");
 		Nefry.getWebServer()->send(200, "application/json", content);
 
 	});
