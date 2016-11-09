@@ -9,7 +9,7 @@ http://opensource.org/licenses/mit-license.php
 
 #include "NefryRESTAPI.h"
 
-#define VERSION "1.0"
+String VERSION "1.0"
 
 int nefryrestapi::pinString(String s)
 {
