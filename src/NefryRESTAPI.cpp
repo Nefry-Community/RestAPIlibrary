@@ -9,7 +9,7 @@ http://opensource.org/licenses/mit-license.php
 
 #include "NefryRESTAPI.h"
 
-String VERSION "1.0"
+String VERSION = "1.0";
 
 int nefryrestapi::pinString(String s)
 {
@@ -305,9 +305,9 @@ void nefryrestapi::i2cControl()
 		else {
 			String ad = Nefry.getWebServer()->arg("address");
 			String content = F("{\"mode\":\"WirebeginTransmission\",\"address\":");
-			content += ad.toiInt();
+			content += ad.toInt();
 			content += F("}");
-			Wire.beginTransmission(ad.toiInt());
+			Wire.beginTransmission((uint8_t)ad.toInt());
 			Nefry.getWebServer()->send(200, "application/json", content);
 		}
 	});
@@ -360,7 +360,7 @@ void nefryrestapi::i2cControl()
 			content += F(",\"count\":");
 			content += cn.toInt();
 			content += F("}");
-			Wire.requestFrom(ad.toInt(), cn.toInt());
+			Wire.requestFrom((uint8_t)ad.toInt(), (uint8_t)cn.toInt());
 			Nefry.getWebServer()->send(200, "application/json", content);
 		}
 	});
